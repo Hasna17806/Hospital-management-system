@@ -1,0 +1,45 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #F5F7F8;
+  color: #0F2438;
+}
+
+@layer components {
+  /* Soft, "lifted" card used across the dashboard and tables */
+  .surface {
+    @apply bg-white rounded-xl2 border border-line shadow-card transition-all duration-300;
+  }
+  .surface-interactive {
+    @apply surface hover:shadow-card-hover hover:-translate-y-0.5;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center gap-2 rounded-lg bg-teal px-4 py-2.5 text-sm font-medium text-white
+           transition-all duration-200 hover:bg-[#0B6362] active:scale-[0.98] shadow-sm;
+  }
+  .btn-secondary {
+    @apply inline-flex items-center gap-2 rounded-lg border border-line bg-white px-4 py-2.5 text-sm font-medium text-ink
+           transition-all duration-200 hover:border-teal hover:text-teal active:scale-[0.98];
+  }
+  .btn-danger-ghost {
+    @apply inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium text-coral
+           transition-colors duration-150 hover:bg-coral/10;
+  }
+
+  .input-field {
+    @apply w-full rounded-lg border border-line bg-white px-3.5 py-2.5 text-sm text-ink placeholder:text-ink/40
+           outline-none transition-all duration-150 focus:border-teal focus:ring-2 focus:ring-teal/15;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium;
+  }
+  .badge-scheduled { @apply badge bg-amber/10 text-amber; }
+  .badge-completed { @apply badge bg-leaf/10 text-leaf; }
+  .badge-cancelled { @apply badge bg-coral/10 text-coral; }
+}
+
+
