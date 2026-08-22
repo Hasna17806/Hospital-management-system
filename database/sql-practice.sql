@@ -1,12 +1,4 @@
 -- ============================================================
--- SQL PRACTICE FILE — Hospital Management System
--- Run schema.sql and seed.sql first, then use this file to
--- practice and review every SQL concept used in this project.
--- Every query has a short comment explaining what it demonstrates.
--- ============================================================
-
-
--- ============================================================
 -- 1. INSERT
 -- ============================================================
 
@@ -106,7 +98,7 @@ SELECT name, specialization FROM doctors ORDER BY name ASC;
 
 
 -- ============================================================
--- 7. LIKE (pattern search)
+-- 7. LIKE (pattern search) 
 -- ============================================================
 
 -- Patients whose name CONTAINS "an" anywhere
