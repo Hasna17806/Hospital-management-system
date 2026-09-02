@@ -1,7 +1,9 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { AuthUser } from "@/types";
 
 const NAV_ITEMS = [
   { href: "/", label: "Dashboard", icon: "grid" },
@@ -52,6 +54,19 @@ function Icon({ name }: { name: string }) {
 
 export default function Sidebar() {
   const pathname = usePathname();
+  const router = useRouter();
+  const [user, setUser] = useState<AuthUser | null>(null);
+
+  useEffect(() => {
+    const stored = localStorage.getItem("user");
+    if (stored) setUser(JSON.parse(stored));
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("user");
+    router.push("/login");
+  };
 
   return (
     <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col bg-ink text-white lg:flex">
@@ -95,8 +110,22 @@ export default function Sidebar() {
         })}
       </nav>
 
-      <div className="px-6 py-6 text-[11px] text-white/35">
-        Built for learning PostgreSQL &amp; full-stack development.
+      <div className="px-6 py-6">
+        {user && (
+          <div className="mb-3 flex items-center justify-between">
+            <div>
+              <p className="text-xs font-medium text-white/80">{user.name}</p>
+              <p className="text-[11px] capitalize text-white/40">{user.role}</p>
+            </div>
+            <button
+              onClick={handleLogout}
+              className="rounded-md px-2 py-1 text-[11px] text-white/50 transition-colors hover:bg-white/10 hover:text-white"
+            >
+              Log out
+            </button>
+          </div>
+        )}
+        <p className="text-[11px] text-white/35">Built for learning PostgreSQL &amp; full-stack development.</p>
       </div>
     </aside>
   );

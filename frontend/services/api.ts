@@ -2,18 +2,38 @@ import {
   Appointment,
   DashboardStats,
   Department,
+  DepartmentAppointmentCount,
   Doctor,
+  LoginResponse,
   Patient,
 } from "@/types";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api";
 
 // Small shared helper so every function doesn't repeat the same
+// fetch + error-handling boilerplate.
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  // Attach the saved token (if any) to every request, so the backend's
+  // requireAuth middleware can verify who's calling.
+  const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
+
   const res = await fetch(`${API_URL}${path}`, {
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    },
     ...options,
   });
+
+  if (res.status === 401) {
+    // Token missing/expired/invalid — send the user back to log in.
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      window.location.href = "/login";
+    }
+    throw new Error("Session expired. Please log in again.");
+  }
 
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
@@ -23,8 +43,15 @@ async function request<T>(path: string, options?: RequestInit): Promise<T> {
   return res.json();
 }
 
+// ---------- Auth ----------
+export const login = (email: string, password: string) =>
+  request<LoginResponse>("/auth/login", { method: "POST", body: JSON.stringify({ email, password }) });
+
 // ---------- Dashboard ----------
 export const getDashboardStats = () => request<DashboardStats>("/dashboard/stats");
+
+export const getAppointmentsByDepartment = () =>
+  request<DepartmentAppointmentCount[]>("/dashboard/appointments-by-department");
 
 // ---------- Patients ----------
 export const getPatients = (search?: string) =>

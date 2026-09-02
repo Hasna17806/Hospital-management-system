@@ -1,0 +1,61 @@
+services:
+  # ---------- PostgreSQL ----------
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: hospital_db
+    ports:
+      - "5432:5432" # host:container — lets you connect with a local SQL client too
+    volumes:
+      # Named volume so data survives container restarts/rebuilds
+      - pgdata:/var/lib/postgresql/data
+      # These run automatically, in filename order, ONLY the first time
+      # the database is created (i.e. on an empty volume).
+      - ./database/schema.sql:/docker-entrypoint-initdb.d/1-schema.sql
+      - ./database/seed.sql:/docker-entrypoint-initdb.d/2-seed.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  # ---------- Express API ----------
+  backend:
+    build: ./backend
+    restart: unless-stopped
+    environment:
+      # "postgres" here is the SERVICE NAME above — Docker Compose
+      # creates an internal network where services can reach each
+      # other by name, instead of "localhost".
+      DATABASE_URL: postgresql://postgres:postgres@postgres:5432/hospital_db
+      PORT: 5000
+    env_file:
+      # Pulls JWT_SECRET (and anything else) from your local backend/.env,
+      # so the real secret never has to be typed into this file or committed.
+      - ./backend/.env
+    ports:
+      - "5000:5000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ---------- Next.js frontend ----------
+  frontend:
+    build:
+      context: ./frontend
+      args:
+        # Browser code can't reach "backend:5000" (that name only
+        # exists inside Docker's network) — from your browser, the
+        # API is still reached at localhost:5000, same as before.
+        NEXT_PUBLIC_API_URL: http://localhost:5000/api
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+
+volumes:
+  pgdata:

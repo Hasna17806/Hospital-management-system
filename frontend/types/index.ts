@@ -44,3 +44,20 @@ export interface DashboardStats {
   totalAppointments: number;
   todaysAppointments: number;
 }
+
+export interface DepartmentAppointmentCount {
+  department: string;
+  total: number;
+}
+
+export interface AuthUser {
+  id: number;
+  name: string;
+  email: string;
+  role: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  user: AuthUser;
+}

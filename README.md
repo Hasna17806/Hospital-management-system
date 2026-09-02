@@ -42,6 +42,7 @@ No ORMs, no auth libraries, no state-management libraries — plain SQL and plai
 
 | Table | Purpose |
 |---|---|
+| `users` | Staff accounts that can log in (email + bcrypt-hashed password + role) |
 | `departments` | Hospital departments (Cardiology, Neurology, etc.) |
 | `doctors` | Doctors, each belonging to one department |
 | `patients` | Patient records |
@@ -104,6 +105,12 @@ All of these are demonstrated with commented, hospital-themed examples in [`data
 ---
 
 ## 7. API Endpoints
+
+**Auth**
+```
+POST   /api/auth/login          (no token required — returns a JWT)
+```
+Every other endpoint below requires an `Authorization: Bearer <token>` header, checked by the `requireAuth` middleware.
 
 **Patients**
 ```

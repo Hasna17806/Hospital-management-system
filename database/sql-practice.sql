@@ -207,7 +207,6 @@ ORDER BY appointment_count DESC;
 -- ============================================================
 -- 13. MULTIPLE JOIN
 -- ============================================================
--- Chain: patients -> appointments -> doctors -> departments
 
 SELECT
     p.name             AS patient_name,

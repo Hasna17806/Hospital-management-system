@@ -21,6 +21,21 @@ DROP TABLE IF EXISTS appointments CASCADE;
 DROP TABLE IF EXISTS doctors CASCADE;
 DROP TABLE IF EXISTS patients CASCADE;
 DROP TABLE IF EXISTS departments CASCADE;
+DROP TABLE IF EXISTS users CASCADE;
+
+-- ============================================================
+-- 0. USERS
+-- ============================================================
+-- Staff accounts that can log in and use the system.
+-- We NEVER store the plain password — only a bcrypt hash of it.
+CREATE TABLE users (
+    id            SERIAL PRIMARY KEY,
+    name          VARCHAR(100) NOT NULL,
+    email         VARCHAR(100) NOT NULL UNIQUE,
+    password_hash VARCHAR(255) NOT NULL,
+    role          VARCHAR(20) NOT NULL DEFAULT 'staff' CHECK (role IN ('admin', 'staff')),
+    created_at    TIMESTAMP NOT NULL DEFAULT NOW()
+);
 
 -- ============================================================
 -- 1. DEPARTMENTS
