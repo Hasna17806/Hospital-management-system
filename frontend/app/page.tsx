@@ -26,7 +26,7 @@ export default function DashboardPage() {
         <div className="surface mb-6 border-coral/30 bg-coral/5 p-4 text-sm text-coral">{error}</div>
       )}
 
-      <div className="grid grid-cols-2 gap-4 sm:gap-5 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-4 sm:gap-4 lg:grid-cols-4">
         <StatCard label="Total Patients" value={stats?.totalPatients ?? "—"} accent="teal" />
         <StatCard label="Total Doctors" value={stats?.totalDoctors ?? "—"} accent="leaf" />
         <StatCard label="Total Appointments" value={stats?.totalAppointments ?? "—"} accent="amber" />
