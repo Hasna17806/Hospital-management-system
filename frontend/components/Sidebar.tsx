@@ -18,10 +18,10 @@ function Icon({ name }: { name: string }) {
     case "grid":
       return (
         <svg viewBox="0 0 24 24" fill="none" className={common}>
-          <rect x="3" y="3" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="1.6" />
-          <rect x="13" y="3" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="1.6" />
-          <rect x="3" y="13" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="1.6" />
-          <rect x="13" y="13" width="8" height="8" rx="2" stroke="currentColor" strokeWidth="1.6" />
+          <rect x="3" y="3" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.6" />
+          <rect x="13" y="3" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.6" />
+          <rect x="3" y="13" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.6" />
+          <rect x="13" y="13" width="8" height="8" rx="1" stroke="currentColor" strokeWidth="1.6" />
         </svg>
       );
     case "user":
@@ -43,7 +43,7 @@ function Icon({ name }: { name: string }) {
     case "calendar":
       return (
         <svg viewBox="0 0 24 24" fill="none" className={common}>
-          <rect x="3.5" y="5" width="17" height="15" rx="2" stroke="currentColor" strokeWidth="1.6" />
+          <rect x="3.5" y="5" width="17" height="15" rx="1" stroke="currentColor" strokeWidth="1.6" />
           <path d="M3.5 9.5h17M8 3v4M16 3v4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
         </svg>
       );
@@ -69,11 +69,11 @@ export default function Sidebar() {
   };
 
   return (
-    <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col bg-ink text-white lg:flex">
-      {/* Signature mark: a heartbeat / vitals line — the one recognizable
-          motif for the whole app, used only here and kept quiet elsewhere. */}
+    <aside className="fixed inset-y-0 left-0 z-30 hidden w-64 flex-col bg-ink text-paper lg:flex">
+      {/* Signature mark: the heartbeat trace, quiet everywhere else,
+          shown once here at full size as the app's identity. */}
       <div className="flex items-center gap-3 px-6 py-7">
-        <svg viewBox="0 0 48 24" className="h-6 w-12 text-teal" fill="none">
+        <svg viewBox="0 0 48 24" className="h-6 w-12 text-chart" fill="none">
           <path
             d="M0 12h9l3-8 5 20 4-16 3 12h8l3-6 3 6h10"
             stroke="currentColor"
@@ -83,25 +83,26 @@ export default function Sidebar() {
           />
         </svg>
         <div>
-          <p className="font-display text-[15px] font-semibold leading-none tracking-tight">Meridian</p>
-          <p className="mt-1 text-[11px] uppercase tracking-wider text-white/45">Hospital System</p>
+          <p className="font-sans text-[15px] font-semibold leading-none tracking-tight">Meridian</p>
+          <p className="mt-1 text-[11px] text-paper/40">Hospital System</p>
         </div>
       </div>
 
-      <nav className="mt-2 flex-1 space-y-1 px-3">
+      <nav className="mt-2 flex-1 space-y-1 pl-3">
         {NAV_ITEMS.map((item) => {
           const active = pathname === item.href;
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`flex items-center gap-3 rounded-lg px-3.5 py-2.5 text-sm transition-all duration-150 ${
-                active
-                  ? "bg-white/10 text-white font-medium"
-                  : "text-white/60 hover:bg-white/5 hover:text-white"
+              className={`relative flex items-center gap-3 rounded-l-[3px] py-2.5 pl-3.5 pr-3 text-sm transition-colors duration-150 ${
+                active ? "bg-paper text-ink font-medium" : "text-paper/60 hover:bg-white/5 hover:text-paper"
               }`}
             >
-              <span className={active ? "text-teal" : "text-white/45"}>
+              {/* Folder-tab effect: active item bleeds into the page
+                  canvas, like a tab sticking out of a chart folder. */}
+              {active && <span className="absolute -right-px inset-y-0 w-2 bg-paper" />}
+              <span className={active ? "text-chart" : "text-paper/45"}>
                 <Icon name={item.icon} />
               </span>
               {item.label}
@@ -112,20 +113,20 @@ export default function Sidebar() {
 
       <div className="px-6 py-6">
         {user && (
-          <div className="mb-3 flex items-center justify-between">
+          <div className="mb-3 flex items-center justify-between border-t border-dashed border-white/15 pt-4">
             <div>
-              <p className="text-xs font-medium text-white/80">{user.name}</p>
-              <p className="text-[11px] capitalize text-white/40">{user.role}</p>
+              <p className="text-xs font-medium text-paper/80">{user.name}</p>
+              <p className="font-mono text-[10px] uppercase text-paper/40">{user.role}</p>
             </div>
             <button
               onClick={handleLogout}
-              className="rounded-md px-2 py-1 text-[11px] text-white/50 transition-colors hover:bg-white/10 hover:text-white"
+              className="rounded-[2px] px-2 py-1 text-[11px] text-paper/50 transition-colors hover:bg-white/10 hover:text-paper"
             >
               Log out
             </button>
           </div>
         )}
-        <p className="text-[11px] text-white/35">Built for learning PostgreSQL &amp; full-stack development.</p>
+        <p className="text-[11px] text-paper/35">Built for learning PostgreSQL &amp; full-stack development.</p>
       </div>
     </aside>
   );

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
+import PageHeading from "@/components/PageHeading";
 import * as api from "@/services/api";
 import { Department, Doctor } from "@/types";
 
@@ -92,17 +93,17 @@ export default function DoctorsPage() {
 
   return (
     <div>
-      <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="font-display text-2xl font-semibold text-ink">Doctors</h1>
-          <p className="mt-1 text-sm text-ink/55">{doctors.length} doctor{doctors.length !== 1 && "s"} on staff</p>
-        </div>
-        <button onClick={openAddModal} className="btn-primary self-start sm:self-auto">
-          + Add Doctor
-        </button>
-      </header>
+      <PageHeading
+        title="Doctors"
+        subtitle={`${doctors.length} doctor${doctors.length !== 1 ? "s" : ""} on staff`}
+        action={
+          <button onClick={openAddModal} className="btn-primary self-start sm:self-auto">
+            + Add doctor
+          </button>
+        }
+      />
 
-      <div className="surface mb-5 p-4">
+      <div className="chart-page mb-5 bg-white p-4">
         <input
           className="input-field max-w-xs"
           placeholder="Search by name..."
@@ -111,13 +112,13 @@ export default function DoctorsPage() {
         />
       </div>
 
-      {error && <div className="surface mb-5 border-coral/30 bg-coral/5 p-4 text-sm text-coral">{error}</div>}
+      {error && <div className="chart-page mb-5 border-vital/30 bg-vital-soft p-4 text-sm text-vital">{error}</div>}
 
-      <div className="surface overflow-hidden">
+      <div className="chart-page overflow-hidden bg-white">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-line bg-canvas/60 text-xs uppercase tracking-wide text-ink/50">
+              <tr className="border-b border-dashed border-line text-xs text-ink-soft">
                 <th className="px-5 py-3 font-medium">Name</th>
                 <th className="px-5 py-3 font-medium">Specialization</th>
                 <th className="px-5 py-3 font-medium">Department</th>
@@ -127,17 +128,17 @@ export default function DoctorsPage() {
             </thead>
             <tbody>
               {loading && (
-                <tr><td colSpan={5} className="px-5 py-8 text-center text-ink/40">Loading doctors...</td></tr>
+                <tr><td colSpan={5} className="px-5 py-8 text-center text-ink-soft">Loading doctors...</td></tr>
               )}
               {!loading && doctors.length === 0 && (
-                <tr><td colSpan={5} className="px-5 py-8 text-center text-ink/40">No doctors found.</td></tr>
+                <tr><td colSpan={5} className="px-5 py-8 text-center text-ink-soft">No doctors found.</td></tr>
               )}
               {!loading && doctors.map((d) => (
-                <tr key={d.id} className="border-b border-line last:border-0 transition-colors hover:bg-canvas/50">
+                <tr key={d.id} className="border-b border-dashed border-line last:border-0 transition-colors hover:bg-watch-soft/40">
                   <td className="px-5 py-3.5 font-medium text-ink">{d.name}</td>
-                  <td className="px-5 py-3.5 text-ink/70">{d.specialization}</td>
-                  <td className="px-5 py-3.5 text-ink/70">{d.department_name}</td>
-                  <td className="px-5 py-3.5 text-ink/70">{d.phone}</td>
+                  <td className="px-5 py-3.5 text-ink-soft">{d.specialization}</td>
+                  <td className="px-5 py-3.5 text-ink-soft">{d.department_name}</td>
+                  <td className="px-5 py-3.5 font-mono text-ink-soft">{d.phone}</td>
                   <td className="px-5 py-3.5">
                     <div className="flex justify-end gap-1">
                       <button onClick={() => openEditModal(d)} className="btn-secondary !px-2.5 !py-1.5 text-xs">Edit</button>
@@ -152,9 +153,9 @@ export default function DoctorsPage() {
       </div>
 
       {modalOpen && (
-        <Modal title={editingId ? "Edit Doctor" : "Add Doctor"} onClose={() => setModalOpen(false)}>
-          <form onSubmit={handleSubmit} className="space-y-3.5">
-            {formError && <p className="text-sm text-coral">{formError}</p>}
+        <Modal title={editingId ? "Edit doctor" : "Add doctor"} onClose={() => setModalOpen(false)}>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {formError && <p className="text-sm text-vital">{formError}</p>}
             <input
               className="input-field" placeholder="Full name" required
               value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })}
@@ -181,7 +182,7 @@ export default function DoctorsPage() {
               value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })}
             />
             <button type="submit" className="btn-primary w-full justify-center">
-              {editingId ? "Save Changes" : "Add Doctor"}
+              {editingId ? "Save changes" : "Add doctor"}
             </button>
           </form>
         </Modal>

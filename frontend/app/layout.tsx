@@ -1,17 +1,18 @@
 import type { Metadata } from "next";
-import { Sora, Inter } from "next/font/google";
+import { IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
 import AppShell from "@/components/AppShell";
 
-const sora = Sora({
+const plexSans = IBM_Plex_Sans({
   subsets: ["latin"],
-  variable: "--font-display",
-  weight: ["500", "600", "700"],
+  variable: "--font-plex-sans",
+  weight: ["400", "500", "600", "700"],
 });
 
-const inter = Inter({
+const plexMono = IBM_Plex_Mono({
   subsets: ["latin"],
-  variable: "--font-body",
+  variable: "--font-plex-mono",
+  weight: ["400", "500", "600"],
 });
 
 export const metadata: Metadata = {
@@ -22,7 +23,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${sora.variable} ${inter.variable} font-body bg-canvas`}>
+      <body className={`${plexSans.variable} ${plexMono.variable} font-sans bg-paper`}>
         <AppShell>{children}</AppShell>
       </body>
     </html>

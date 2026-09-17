@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Modal from "@/components/Modal";
+import PageHeading from "@/components/PageHeading";
 import * as api from "@/services/api";
 import { Appointment, AppointmentStatus, Doctor, Patient } from "@/types";
 
@@ -104,20 +105,20 @@ export default function AppointmentsPage() {
 
   return (
     <div>
-      <header className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="font-display text-2xl font-semibold text-ink">Appointments</h1>
-          <p className="mt-1 text-sm text-ink/55">{appointments.length} appointment{appointments.length !== 1 && "s"}</p>
-        </div>
-        <button onClick={openAddModal} className="btn-primary self-start sm:self-auto">
-          + New Appointment
-        </button>
-      </header>
+      <PageHeading
+        title="Appointments"
+        subtitle={`${appointments.length} appointment${appointments.length !== 1 ? "s" : ""}`}
+        action={
+          <button onClick={openAddModal} className="btn-primary self-start sm:self-auto">
+            + New appointment
+          </button>
+        }
+      />
 
-      <div className="surface mb-5 flex flex-wrap gap-2 p-4">
+      <div className="chart-page mb-5 flex flex-wrap gap-2 bg-white p-4">
         <button
           onClick={() => setStatusFilter("")}
-          className={`rounded-full px-3.5 py-1.5 text-sm transition-colors ${statusFilter === "" ? "bg-ink text-white" : "bg-canvas text-ink/60 hover:bg-teal-light"}`}
+          className={`rounded-[2px] px-3.5 py-1.5 text-sm transition-colors ${statusFilter === "" ? "bg-ink text-paper" : "text-ink-soft hover:bg-chart-soft"}`}
         >
           All
         </button>
@@ -125,20 +126,20 @@ export default function AppointmentsPage() {
           <button
             key={s}
             onClick={() => setStatusFilter(s)}
-            className={`rounded-full px-3.5 py-1.5 text-sm transition-colors ${statusFilter === s ? "bg-ink text-white" : "bg-canvas text-ink/60 hover:bg-teal-light"}`}
+            className={`rounded-[2px] px-3.5 py-1.5 text-sm transition-colors ${statusFilter === s ? "bg-ink text-paper" : "text-ink-soft hover:bg-chart-soft"}`}
           >
             {s}
           </button>
         ))}
       </div>
 
-      {error && <div className="surface mb-5 border-coral/30 bg-coral/5 p-4 text-sm text-coral">{error}</div>}
+      {error && <div className="chart-page mb-5 border-vital/30 bg-vital-soft p-4 text-sm text-vital">{error}</div>}
 
-      <div className="surface overflow-hidden">
+      <div className="chart-page overflow-hidden bg-white">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-sm">
             <thead>
-              <tr className="border-b border-line bg-canvas/60 text-xs uppercase tracking-wide text-ink/50">
+              <tr className="border-b border-dashed border-line text-xs text-ink-soft">
                 <th className="px-5 py-3 font-medium">Patient</th>
                 <th className="px-5 py-3 font-medium">Doctor</th>
                 <th className="px-5 py-3 font-medium">Department</th>
@@ -149,17 +150,17 @@ export default function AppointmentsPage() {
             </thead>
             <tbody>
               {loading && (
-                <tr><td colSpan={6} className="px-5 py-8 text-center text-ink/40">Loading appointments...</td></tr>
+                <tr><td colSpan={6} className="px-5 py-8 text-center text-ink-soft">Loading appointments...</td></tr>
               )}
               {!loading && appointments.length === 0 && (
-                <tr><td colSpan={6} className="px-5 py-8 text-center text-ink/40">No appointments found.</td></tr>
+                <tr><td colSpan={6} className="px-5 py-8 text-center text-ink-soft">No appointments found.</td></tr>
               )}
               {!loading && appointments.map((a) => (
-                <tr key={a.appointment_id} className="border-b border-line last:border-0 transition-colors hover:bg-canvas/50">
+                <tr key={a.appointment_id} className="border-b border-dashed border-line last:border-0 transition-colors hover:bg-watch-soft/40">
                   <td className="px-5 py-3.5 font-medium text-ink">{a.patient_name}</td>
-                  <td className="px-5 py-3.5 text-ink/70">{a.doctor_name}</td>
-                  <td className="px-5 py-3.5 text-ink/70">{a.department_name}</td>
-                  <td className="px-5 py-3.5 text-ink/70">{new Date(a.appointment_date).toLocaleString()}</td>
+                  <td className="px-5 py-3.5 text-ink-soft">{a.doctor_name}</td>
+                  <td className="px-5 py-3.5 text-ink-soft">{a.department_name}</td>
+                  <td className="px-5 py-3.5 font-mono text-ink-soft">{new Date(a.appointment_date).toLocaleString()}</td>
                   <td className="px-5 py-3.5"><StatusBadge status={a.status} /></td>
                   <td className="px-5 py-3.5">
                     <div className="flex justify-end gap-1">
@@ -175,9 +176,9 @@ export default function AppointmentsPage() {
       </div>
 
       {modalOpen && (
-        <Modal title={editingId ? "Edit Appointment" : "New Appointment"} onClose={() => setModalOpen(false)}>
-          <form onSubmit={handleSubmit} className="space-y-3.5">
-            {formError && <p className="text-sm text-coral">{formError}</p>}
+        <Modal title={editingId ? "Edit appointment" : "New appointment"} onClose={() => setModalOpen(false)}>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {formError && <p className="text-sm text-vital">{formError}</p>}
             <select
               className="input-field" required value={form.patient_id}
               onChange={(e) => setForm({ ...form, patient_id: e.target.value })}
@@ -207,7 +208,7 @@ export default function AppointmentsPage() {
               value={form.reason} onChange={(e) => setForm({ ...form, reason: e.target.value })}
             />
             <button type="submit" className="btn-primary w-full justify-center">
-              {editingId ? "Save Changes" : "Create Appointment"}
+              {editingId ? "Save changes" : "Create appointment"}
             </button>
           </form>
         </Modal>

@@ -8,25 +8,25 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        ink: "#0F2438",        // deep navy — headings, sidebar
-        teal: "#0E7C7B",       // primary accent
-        "teal-light": "#E4F3F2",
-        coral: "#E8623D",      // urgent / cancelled
-        amber: "#D99A2B",      // scheduled
-        leaf: "#3F9142",       // completed / success
-        canvas: "#F5F7F8",     // page background
-        line: "#E4E9EC",       // borders
+        paper: "#EEF2F0",     // page background — clinical grey-mint
+        ink: "#17242B",       // primary text
+        "ink-soft": "#4B5A60",
+        line: "#C7D2CE",      // hairlines, chart-grid, borders
+        chart: "#2B5F82",     // primary interactive accent
+        "chart-soft": "#E4EDF2",
+        vital: "#B3271F",     // cancelled / danger
+        "vital-soft": "#F5E4E2",
+        mend: "#21694A",      // completed / success
+        "mend-soft": "#E2EEE7",
+        watch: "#B4791F",     // scheduled / warning
+        "watch-soft": "#F3EBDC",
       },
       fontFamily: {
-        display: ["var(--font-display)", "sans-serif"],
-        body: ["var(--font-body)", "sans-serif"],
-      },
-      boxShadow: {
-        card: "0 1px 2px rgba(15, 36, 56, 0.04), 0 8px 24px rgba(15, 36, 56, 0.06)",
-        "card-hover": "0 4px 10px rgba(15, 36, 56, 0.08), 0 16px 32px rgba(15, 36, 56, 0.10)",
+        sans: ["var(--font-plex-sans)", "sans-serif"],
+        mono: ["var(--font-plex-mono)", "monospace"],
       },
       borderRadius: {
-        xl2: "1.25rem",
+        chart: "3px",
       },
     },
   },

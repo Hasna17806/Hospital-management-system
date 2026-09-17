@@ -1,24 +1,24 @@
 interface StatCardProps {
   label: string;
   value: number | string;
-  accent?: "teal" | "amber" | "leaf" | "coral";
+  accent?: "chart" | "watch" | "mend" | "vital";
 }
 
 const ACCENT_MAP = {
-  teal: "text-teal bg-teal-light",
-  amber: "text-amber bg-amber/10",
-  leaf: "text-leaf bg-leaf/10",
-  coral: "text-coral bg-coral/10",
+  chart: "bg-chart",
+  watch: "bg-watch",
+  mend: "bg-mend",
+  vital: "bg-vital",
 };
 
-export default function StatCard({ label, value, accent = "teal" }: StatCardProps) {
+export default function StatCard({ label, value, accent = "chart" }: StatCardProps) {
   return (
-    <div className="surface-interactive p-5">
-      <div className={`inline-flex h-9 w-9 items-center justify-center rounded-lg ${ACCENT_MAP[accent]}`}>
-        <span className="h-2 w-2 rounded-full bg-current" />
+    <div className="chart-page-hover p-5">
+      <div className="flex items-center gap-2">
+        <span className={`h-2 w-2 ${ACCENT_MAP[accent]}`} />
+        <p className="text-xs text-ink-soft">{label}</p>
       </div>
-      <p className="mt-4 font-display text-3xl font-semibold text-ink">{value}</p>
-      <p className="mt-1 text-sm text-ink/55">{label}</p>
+      <p className="mt-3 font-mono text-3xl font-semibold tabular-nums text-ink">{value}</p>
     </div>
   );
 }
